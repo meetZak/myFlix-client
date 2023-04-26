@@ -1,34 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView} from "../movie-view/movie-view";
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1,
-      title: "Babylon",
-      image:
-        "https://www.babylonmovie.com/posters/",
-      director: "Damien Chazelle"
-    },
-    {
-      id: 2,
-      title: "Titanic",
-      image:
-        "https://www.amazon.com/Titanic-Decorative-Painting-Recreation-30x45%EF%BC%88cm%EF%BC%8912x18/dp/B09KM6ZS1P/ref=sr_1_2_sspa?keywords=Titanic%2Bposter&qid=1681854694&sr=8-2-spons&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzN0UyQVRSOFRaTUlIJmVuY3J5cHRlZElkPUEwNTE2MTUwMk04MFo4RVRYRkc3OCZlbmNyeXB0ZWRBZElkPUEwMDMyMTk5M042M1hNTDBESTRTTSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU&th=1",
-      director: "James Cameron"
-    },
-    {
-      id: 3,
-      title: "Your Place or Mine",
-      image:
-        "https://www.imdb.com/title/tt12823454/mediaviewer/rm1722301697/?ref_=tt_ov_i",
-      director: "Aline Brosh McKenna"
-    },
-    
-  ]);
+  const [movies, setMovies] = useState([]);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+    useEffect(() => {
+    fetch("https://zaflix.herokuapp.com/movies")
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.map((movie) => {
+          return {
+            id: movie._id,
+            title: movie.Title,
+            image: movie.ImagePath,
+            description: movie.Description,
+            genre: movie.Genre.Name,
+            director: movie.Director.Name,
+            release: movie.Release
+          };
+        });
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
 
   if (selectedMovie) {
     return (
