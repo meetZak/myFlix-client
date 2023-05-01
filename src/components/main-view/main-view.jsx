@@ -13,6 +13,7 @@ export const MainView = () => {
   const storedToken = localStorage.getItem("token");
   const [user, setUser] = useState(storedUser? storedUser : null);
   const [token, setToken] = useState(storedToken? storedToken : null);
+  const [loading, setLoading] = useState(false);
 
 
 // Loading Data from an API
@@ -60,9 +61,6 @@ if (!user) {
 
 
 
-
-
-
 if (selectedMovie) {
   return (
     <>
@@ -75,11 +73,33 @@ if (selectedMovie) {
   );
 }
 
+if (movies.length === 0) {
   return (
-    <div>
-      {movies.map((movie) => (
+    <>
+    <button onClick={() => { setUser(null); setToken(null); localStorage.clear();
+    }}
+    > Logout
+    </button>
+    <div>The list is empty!</div>
+  </>
+  );
+}
+
+return (
+
+  loading ? (
+    <p>Loading...</p>
+  ) : !movies || !movies.length ? (
+    <p>No movies found</p>
+  ) : (
+  <div>
+    <button onClick={() => { setUser(null); setToken(null); localStorage.clear();
+    }}
+  > Logout
+  </button>
+  {movies.map((movie) => (
         <MovieCard
-          key={movie.id}
+          key={movie._id}
           movie={movie}
           onMovieClick={(newSelectedMovie) => {
             setSelectedMovie(newSelectedMovie);
@@ -87,6 +107,5 @@ if (selectedMovie) {
         />
       ))}
     </div>
-  );
-  
-};
+  ));
+}
