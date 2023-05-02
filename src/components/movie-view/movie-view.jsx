@@ -1,3 +1,4 @@
+// Creating MovieView Component.
 export const MovieView = ({ movie, onBackClick }) => {
   return (
     <div>
