@@ -1,19 +1,19 @@
 import { useState } from "react";
+import { Card, CardGroup, Col, Container, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   // validation of user login
   const handleSubmit = (event) => {
     // prevents the default behavior of the form which is to reload the entire page
     event.preventDefault();
-
     const data = {
       Username: username,
       Password: password
     };
-
     fetch("https://zaflix.herokuapp.com/login", {
       method: "POST",
       headers: {
@@ -37,30 +37,44 @@ export const LoginView = ({ onLoggedIn }) => {
     });
   };
 
-  // login forms and a  submit button
   return (
-    // handleSubmit is the callback of onSubmit, tells the login API to validate user and password
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          minLength="5"
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
-  );
-}; 
+    <Container >
+      <Row>
+        <Col>
+          <CardGroup>
+            <Card style={{marginTop: 50}}>
+            <Card.Body>
+              <Card.Title>Please Log In</Card.Title>
+              <Form onSubmit={handleSubmit} >
+                <Form.Group controlId="logInFormUsername">
+                <Form.Label>Username:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  minLength="5" 
+                />
+                </Form.Group>
+                <Form.Group controlId="logInFormPassword">
+                <Form.Label>Password:</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              <Button variant="primary" type="submit" style={{ margin: '0.7rem'}}>
+              Submit
+              </Button>
+              </Form>
+            </Card.Body>
+            </Card>
+          </CardGroup>
+        </Col>
+      </Row>
+    </Container>
+    );
+  };
