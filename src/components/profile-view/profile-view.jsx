@@ -2,26 +2,22 @@ import { useState } from "react";
 import { Card, Container, Col, Row, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
-
 export const ProfileView = ({ user, movies }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
-
     const favMovies = movies.filter((movie) => user.FavoriteMovies.includes(movie.id));
-
     const handleSubmit = (event) => {
-
+    
         event.preventDefault(); 
-
+        
         const data = {
           Username: username,
           Password: password,
           Email: email,
           Birthday: birthday
         };
-
         fetch("https://zaflix.herokuapp.com/users/${user.Username}", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -32,14 +28,11 @@ export const ProfileView = ({ user, movies }) => {
           if (response.ok) {
             alert("Update successful");
             window.location.reload();
-
         } else {
           alert("Update failed");
         }
       });
     }; 
-
-
   return (
     <Container >
       <Row>
@@ -50,23 +43,18 @@ export const ProfileView = ({ user, movies }) => {
               <Card.Text>
                 <div>
                 <div>
-                  <span>Username: </span>
-                  <span>{username}</span>
+                </div><span>Username: {user.Username}</span>
                 </div>
                 <div>
-                  <span>Birthday: </span>
-                  <span>{birthday}</span>
+                <span>Birthday: {user.Birthday} </span>
                 </div>
                 <div>
-                  <span>Email: </span>
-                  <span>{email}</span>
-                </div>
+                <span>Email: {user.Email} </span>
                 </div>
                 </Card.Text>
             </Card.Body>
           </Card>
         </Col>
-
         <Col>
           <Card style={{marginTop: 30}}>
           <Card.Body>
@@ -80,10 +68,8 @@ export const ProfileView = ({ user, movies }) => {
                   onChange={(e) => setUsername(e.target.value)}
                   minLength="5" 
                   placeholder="Enter username (min 5 characters)"
-
                 />
               </Form.Group>
-
               <Form.Group controlId="updatePassword">
                 <Form.Label>New Password:</Form.Label>
                 <Form.Control
@@ -91,10 +77,8 @@ export const ProfileView = ({ user, movies }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
-
                 />
               </Form.Group>
-
               <Form.Group controlId="updateFormEmail">
                 <Form.Label>New Email:</Form.Label>
                 <Form.Control
@@ -104,7 +88,6 @@ export const ProfileView = ({ user, movies }) => {
                   placeholder="Enter email"
                 />
               </Form.Group>
-
               <Form.Group controlId="updateFormBirthday">
                 <Form.Label>New Birthday:</Form.Label>
                 <Form.Control
@@ -113,26 +96,14 @@ export const ProfileView = ({ user, movies }) => {
                   onChange={(e) => setBirthday(e.target.value)}
                 />
               </Form.Group>
-
               <Button variant="primary" type="submit" style={{ margin: '0.7rem'}}>
                 Submit
               </Button>
               </Form>
-
             </Card.Body>
           </Card>
         </Col>
-
-    </Row>
-
-    <Row>
-      <Col>
-        <h3>Favorite Movies</h3>
-        <MovieCard
-            favMovies={favMovies}
-        />
-      </Col>
-    </Row>
-</Container>
+        </Row>
+    </Container>
 );
 };
