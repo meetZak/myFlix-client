@@ -4,6 +4,8 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView} from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -56,12 +58,14 @@ return (
         user={user}
         onLoggedOut={() => {
           setUser(null);
+          setToken(null);
+          localStorage.clear();
         }}
       </NavigationBar>
       <Row className="justify-content-md-center">
         <Routes>
           <Route
-            path="/signup"
+            path="/users"
             element={
               <>
                 {user ? (
@@ -72,7 +76,6 @@ return (
                   </Col>
                 )}
               </>
-
             }
           />
           <Route
@@ -83,7 +86,7 @@ return (
                   <Navigate to="/" />
                 ) : (
                   <Col md={5}>
-                    <LoginView onLoggedIn={(user, token) => {setUser(user); setToken(token)}} /> 
+                    <LoginView onLoggedIn={(user) => setUser(user)} /> 
                   </Col>
                 )}
               </>
@@ -101,6 +104,20 @@ return (
                 ) : (
                   <Col md={8}>
                     <MovieView movies={movies} />
+                  </Col>
+                )}
+              </>
+            }
+          />
+         <Route
+            path="/users" 
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : (
+                  <Col md={8}>
+                    <ProfileView user={user} movies={movies} />
                   </Col>
                 )}
               </>
