@@ -1,15 +1,35 @@
 import { useState } from "react";
 import { Card, Container, Col, Row, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { MovieCard } from "../movie-card/movie-card";
+import { FavoritesView } from "../profile-view/fav-movies";
 export const ProfileView = ({ user, movies }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
     const [token] = useState("");
-    const favoriteMovies = movies.filter((movie) => user.FavoriteMovies.includes(movie.id));
-    const handleSubmit = (event) => {
+    const favMovies = movies.filter((movie) => user.FavoriteMovies.includes(movie.id))
+
+    const removeFav = () => {
+        fetch("https://zaflix.herokuapp.com/users/${user._id}/favorites",
+            {
+              method: "DELETE",
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`, 
+                  "Content-Type": "application/json",
+              },
+            }  
+        ).then((response)=> response.json())
+        .then((data)=>{
+            if(data.newUser){
+                localStorage.setItem('user', JSON.stringify(data.newUser));
+                window.location.reload();
+            }else{
+                alert('there was an issue removing the movie.')
+            }
+        }).catch((e)=>console.log(e));
+    }
+    const handleUpdates = (event) => {
     
         event.preventDefault(); 
         
@@ -19,7 +39,7 @@ export const ProfileView = ({ user, movies }) => {
           Email: email,
           Birthday: birthday
         };
-        fetch("https://zaflix.herokuapp.com/users", {
+        fetch("https://zaflix.herokuapp.com/users/${user.Username", {
             method: "PUT",
             body: JSON.stringify(data),
             headers: {
@@ -59,7 +79,7 @@ export const ProfileView = ({ user, movies }) => {
         <Col>
           <Card style={{marginTop: 30}}>
             <Card.Body>
-              <Card.Title>Your MyFlix Profile</Card.Title>
+              <Card.Title> MyFlix Profile</Card.Title>
               <Card.Text>
                 <div>
                 <div>
@@ -79,13 +99,13 @@ export const ProfileView = ({ user, movies }) => {
           <Card style={{marginTop: 30}}>
           <Card.Body>
               <Card.Title>Update your Profile</Card.Title>
-              <Form onSubmit={handleSubmit}>  
+              <Form onSubmit={handleUpdates} className="w-100">  
               <Form.Group controlId="updateFormUsername">
                 <Form.Label>New Username:</Form.Label>
                 <Form.Control
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(event) => setUsername(event.target.value)}
                   minLength="5" 
                   placeholder="Enter username (min 5 characters)"
                 />
@@ -95,7 +115,7 @@ export const ProfileView = ({ user, movies }) => {
                 <Form.Control
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="Password"
                 />
               </Form.Group>
@@ -104,7 +124,7 @@ export const ProfileView = ({ user, movies }) => {
                 <Form.Control
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="Enter email"
                 />
               </Form.Group>
@@ -113,7 +133,7 @@ export const ProfileView = ({ user, movies }) => {
                 <Form.Control
                   type="date"
                   value={birthday}
-                  onChange={(e) => setBirthday(e.target.value)}
+                  onChange={(event) => setBirthday(event.target.value)}
                 />
               </Form.Group>
               <Button variant="primary" type="submit" style={{ margin: '0.7rem'}}>
@@ -123,7 +143,9 @@ export const ProfileView = ({ user, movies }) => {
               </Form>
             </Card.Body>
           </Card>
+          <Link to="/login">
           <Button onClick={() => handleDeregister(user._id)} className="button-delete mt-3" type="submit" variant="danger" >Delete Account</Button>
+          </Link>
         </Col>
         </Row>
         <Row className="justify-contents-center">
@@ -141,6 +163,7 @@ export const ProfileView = ({ user, movies }) => {
               </>
            )}            
       </Row> 
+      <FavoritesView favMovies={favMovies} removeFav={removeFav}/>
     </Container>
 );
 };
