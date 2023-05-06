@@ -9,37 +9,28 @@ export const MovieView = ({ movies }) => {
 
   const movie = movies.find((b)=> b.id === movieId);
 
-   // trying to add click event to favorite button
-   const handleAddFavorite = (event) => {
+  const addFav = (id) => {
+    fetch("https://zaflix.herokuapp.com/users/${user._id}/favorites/${id}",
+            {
+              method: "POST",
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`, 
+                  "Content-Type": "application/json",
+              },
+            }  
+        ).then((response)=> response.json())
+        .then((data)=>{
+            if(data.newUser){
+                localStorage.setItem('user', JSON.stringify(data.newUser));
+                window.location.reload();
+            }else{
+                alert('there was an issue adding the movie.')
+            }
+        }).catch((e)=>console.log(e));
+    }
 
-    const data = {
-      FavoriteMovie: movieId,
-    };
-  
-    fetch("https://zaflix.herokuapp.com/users/users/${userId}/favorites", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("movie added to favorites");
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        localStorage.setItem("token", data.token);
-        onLoggedIn(data.user, data.token);
-      } else {
-        alert("movie could not be added");
-      }
-    })
-    .catch((e) => {
-      alert("Something went wrong");
-    });
-  };
-  return (
-<Container > 
+    return (
+      <Container > 
         <Row> 
           <Col md={12}> 
             <Card >
@@ -67,7 +58,7 @@ export const MovieView = ({ movies }) => {
                 <Link to={`/`}>
                   <button className="back-button" style={{ cursor: "pointer" }}>Back</button>
                 </Link>
-                <Button onClick={() => handleAddFavorite()} className="fav-button" variant="secondary" size="sm" type="submit" style={{ cursor: "pointer" }} >Favorite</Button>
+                <Button onClick= {()=>addFav(movies._id)} className="fav-button" variant="secondary" size="sm" type="submit" style={{ cursor: "pointer" }} >Favorite</Button>
                 </div>
                 </Card.Text>
               </Card.Body> 
@@ -77,3 +68,4 @@ export const MovieView = ({ movies }) => {
       </Container> 
     );
   };
+ 

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Card, CardGroup, Col, Container, Row } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Card, CardGroup, Col, Container, Row, Button, Form} from "react-bootstrap";
+import { Navigate, useNavigate } from "react-router";
 
-
-export const SignupView = () => {
+export const SignupView = (onLoggedIn) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
+  const navigate = useNavigate();
 
   // validation of user signup
   const handleSubmit = (event) => {
@@ -35,7 +34,8 @@ export const SignupView = () => {
       } else {
         alert("Signup failed");
       }
-    });
+      }) .catch((e) => console.log(e));
+      navigate('/login') 
   };
 
   // signup form with submit button
