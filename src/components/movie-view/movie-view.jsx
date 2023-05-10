@@ -1,10 +1,36 @@
 // Creating MovieView Component.
-import { Card, Container, Row, Col} from 'react-bootstrap';
+import { Card, Container, Row, Col, Button} from 'react-bootstrap';
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import './movie-view.scss';
 
-export const MovieView = ({ movie, onBackClick }) => {
-  return (
-<Container > 
+export const MovieView = ({ movies }) => {
+  const {movieId}= useParams();
+
+  const movie = movies.find((b)=> b.id === movieId);
+
+  const addFav = (id) => {
+    fetch("https://zaflix.herokuapp.com/users/${user._id}/favorites/${id}",
+            {
+              method: "POST",
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`, 
+                  "Content-Type": "application/json",
+              },
+            }  
+        ).then((response)=> response.json())
+        .then((data)=>{
+            if(data.newUser){
+                localStorage.setItem('user', JSON.stringify(data.newUser));
+                window.location.reload();
+            }else{
+                alert('there was an issue adding the movie.')
+            }
+        }).catch((e)=>console.log(e));
+    }
+
+    return (
+      <Container > 
         <Row> 
           <Col md={12}> 
             <Card >
@@ -29,7 +55,10 @@ export const MovieView = ({ movie, onBackClick }) => {
                   <span>Release: </span>
                   <span>{movie.release}</span>
                 </div>
-                <button onClick={onBackClick} className="back-button" style={{ cursor: "pointer" }}>Back</button>
+                <Link to={`/`}>
+                  <button className="back-button" style={{ cursor: "pointer" }}>Back</button>
+                </Link>
+                <Button onClick= {()=>addFav(movies._id)} className="fav-button" variant="secondary" size="sm" type="submit" style={{ cursor: "pointer" }} >Favorite</Button>
                 </div>
                 </Card.Text>
               </Card.Body> 
@@ -39,3 +68,4 @@ export const MovieView = ({ movie, onBackClick }) => {
       </Container> 
     );
   };
+ 

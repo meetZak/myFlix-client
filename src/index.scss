@@ -6,3 +6,15 @@ $color: steelblue;
 $body-bg: white;
 
 @import '~bootstrap/scss/bootstrap.scss';
+
+.form-body{
+    background-color: #75c8ae;
+}
+
+.navbar-custom {
+    background-color: teal;
+}
+
+.navbar-custom .navbar-brand {
+    color: white;
+}
