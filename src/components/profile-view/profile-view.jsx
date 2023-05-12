@@ -1,154 +1,210 @@
 import { useState } from "react";
-import { Card, Container, Col, Row, Button, Form } from "react-bootstrap";
-import { FavoritesView } from "../profile-view/fav-movies";
+import { MovieCard } from "../movie-card/movie-card";
 import { UserInfo } from "./user-info";
+import { useParams } from "react-router";
+import { Card, Container, Col, Row, Button, Form } from "react-bootstrap";
+import './profile-view.scss';
+import moment from "moment";
 
-export const ProfileView = ({ user, movies }) => {
-    const [username, setUsername] = useState("");
+
+
+export const ProfileView = ({ movies }) => {
+
+    const storedUser = JSON.parse(localStorage.getItem("user"))
+    //const [updatedUser, setUpdatedUser] = useState(false);
+    const { movieId } = useParams();
+    const [username, setUsername] = useState(storedUser.Username);
     const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [birthday, setBirthday] = useState("");
-    const [token] = useState("");
-    const favMovies = movies.filter((movie) => user.FavoriteMovies.includes(movie._id))
+    const [email, setEmail] = useState(storedUser.Email);
+    const [birthday, setBirthday] = useState(storedUser.Birthday);
+    const token = localStorage.getItem("token");
+    const [showForm, setShowForm] = useState(false);
+    //const storedUser = null;
+    
+    console.log ("user profile view", storedUser);
+ 
+  
 
-    const removeFav = (id) => {
-        fetch("https://zaflix.herokuapp.com/users/${user._id}/favorites/${id}",
-        {
+    // apply filter to favorite movie list
+    const favMovies = movies.filter((movie) => storedUser.FavoriteMovies.includes(movie.id));
+    console.log ("movies profile view", favMovies);
+
+    // handle for updating user info
+    const handleUpdate = (e) => {
+    
+      e.preventDefault(); 
+      
+      const data = {};
+      if (username !== storedUser.Username) data.Username = username;
+      if (password) data.Password = password;
+      if (email !== storedUser.Email) data.Email = email;
+      if (birthday !== storedUser.Birthday) data.Birthday = birthday;
+      
+      console.log(data);
+
+      fetch(`https://zaflix.herokuapp.com/users/${storedUser.Username}`, {
+          
+          method: "PATCH",
+          
+          headers: {
+          Authorization : `Bearer ${localStorage.getItem('token')}`,
+          "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+
+        }).then((response)=>response.json())
+          .then((data)=> { 
+          console.log(data);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          alert("Update successful, please log in again!");
+          localStorage.clear();
+          window.location.reload();
+          
+        }).catch((e)=>{
+        alert("Something went wrong!");
+        console.log(e);
+        })
+    }; 
+    
+    const handleToggleForm = () => {
+      setShowForm(!showForm);
+    };
+  
+    // handle for deleting user account
+    const handleDeregister = () => { 
+    
+        fetch(`https://zaflix.herokuapp.com/users/${storedUser.Username}`, {
           method: "DELETE",
           headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`, 
-              "Content-Type": "application/json",
-          },
-        }  
-    ).then((response)=> response.json())
-    .then((data)=>{
-        if(data.newUser){
-            localStorage.setItem('user', JSON.stringify(data.newUser));
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        }).then((response) => {
+           if (response.ok) {
+            localStorage.clear();
+            alert("Account successfully deleted");
+            <Navigate to="/signup" /> // replace window reload with navigate
+           }
+            else {
+            alert("Deletion failed!")
             window.location.reload();
-        }else{
-            alert('there was an issue removing the movie.')
-        }
-    }).catch((e)=>console.log(e));
-}
-const handleUpdate = (event) => {
+          }
+        }).catch((e)=>{
+          alert("Something went wrong")
+          window.location.reload();
+          console.log(e);
 
-    event.preventDefault(); 
-    
-    const data = {
-      Username: username,
-      Password: password,
-      Email: email,
-      Birthday: birthday
+      })
     };
-    fetch("https://zaflix.herokuapp.com/users/${user.Username}", {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-        "Content-Type": "application/json",
-        Authorization :`Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify (data),
-     }).then((response)=>response.json())
-     .then((data)=>{
-       if(data.newUser){
-           localStorage.setItem("user", JSON.stringify(data.newUser));
-           alert('Update successful!')
-           window.location.reload();
-       }else{
-           alert('Update failed!')
-       }
-   }).catch((e)=>{
-       console.log(e);
-   })
-}
-const handleDeregister = (username) => {
 
-    fetch("https://zaflix.herokuapp.com/users/${Username}", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization : `Bearer ${localStorage.getItem('token')}`
-      }
-    }).then((response) => {
-      if (response.ok) {
-        alert("Account successfully deleted");
-        localStorage.clear();
-        window.location.reload(); 
-      } else {
-        alert("Something went wrong");
-      }
-    }).catch((e)=>{
-      console.log(e);
-  })
-};
-return (
-<Container >
-  <Row>
-  <Col xs={12} sm={4}>
-      <Card style={{marginTop: 30}}>
-        <Card.Body>
-          <Card.Title>My Information</Card.Title>
-          <Card.Text>
-          <UserInfo username={user.Username} email={user.Email} handleDeregister={handleDeregister} />
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Col>
-    <Col xs={12} sm={8}>
-      <Card style={{marginTop: 30}}>
-      <Card.Body>
-          <Card.Title>Update Information</Card.Title>
-          <Form className="w-100" onSubmit={handleUpdate}>  
-          <Form.Group controlId="updateFormUsername">
-            <Form.Label>New Username:</Form.Label>
-            <Form.Control
-              type="text"
-              defaultValue={username}
+// returns 1. rendered userinfo component, 2. update form, 3. rendered favorites list
+  return (
+    <Container>
+      <Row className="mb-4" style={{marginTop: 60}}>
+        <Col xs={12} sm={8} md={6} lg={6}>
+          <Card style={{marginTop: 30, backgroundColor: "whitesmoke"}}>
+            <Card.Body>
+              <UserInfo username={storedUser.Username} email={storedUser.Email} birthday={storedUser.Birthday} handleDeregister={handleDeregister} /> 
+              
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Button variant="secondary" size="sm" onClick={handleToggleForm}>{showForm ? "close" : "edit info"} </Button>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+        {showForm && (
+
+          <Card style={{marginTop: 30, backgroundColor: "whitesmoke", marginBottom: 30}}>
+          <Card.Body>
+            <Card.Title>Update Information</Card.Title>
+              <Form className="w-100" onSubmit={handleUpdate}> 
+              <Form.Group controlId="updateFormUsername">
+                <Form.Label style={{ marginTop: 10 }}>Username:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
                   onChange={event => setUsername(event.target.value)} 
-              minLength="5" 
-              placeholder="Enter username (min 5 characters)"
-            />
-          </Form.Group>
-          <Form.Group controlId="updatePassword">
-            <Form.Label>New Password:</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              defaultValue=''
+                  minLength="5" 
+                  placeholder="Enter username (min 5 characters)"
+
+                />
+              </Form.Group>
+
+              <Form.Group controlId="updatePassword">
+                <Form.Label style={{ marginTop: 15 }} >Password:<span className="required" style={{color: "red"}}>*</span></Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
                   onChange={event => setPassword(event.target.value)}
-              placeholder="Password"
-            />
-          </Form.Group>
-          <Form.Group controlId="updateFormEmail">
-            <Form.Label>New Email:</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              defaultValue={email}
+                  placeholder="password"
+
+                />
+              </Form.Group>
+
+              <Form.Group controlId="updateFormEmail">
+                <Form.Label style={{ marginTop: 15 }} >Email:</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={email}
                   onChange={event => setEmail(event.target.value)}
-              placeholder="Enter email"
-            />
-          </Form.Group>
-          <Form.Group controlId="updateFormBirthday">
-            <Form.Label>New Birthday:</Form.Label>
-            <Form.Control
-              type="date"
-              defaultValue={birthday}
+                  placeholder="Enter email"
+                />
+              </Form.Group>
+
+              <Form.Group controlId="updateFormBirthday">
+                <Form.Label style={{ marginTop: 15 }} >Birthday: </Form.Label>
+                <Form.Control
+                  type="date"
+                  value={moment(birthday).format("MM-DD-YYYY")}
                   onChange={event => setBirthday(event.target.value)}
+                />
+              </Form.Group>
+
+              <Button variant="secondary" type="submit" style={{marginTop: 20, marginBottom: 10}} onClick={handleUpdate}>
+                Save Changes
+              </Button>
+
+              <Form.Text className="required" style={{color: "red"}}>
+              <p> <span >*</span>Required field </p>
+              </Form.Text>
+              </Form>
+          
+            </Card.Body>
+          </Card>
+          )}
+
+
+        </Col>
+      </Row>
+
+
+        
+      
+      <>
+      <Row style={{marginTop: 100}}>
+        {favMovies.length === 0 ? ( 
+        <h4>You haven't added any movies! </h4>
+        ) : (
+        <>  
+        <h4>Favorite Movies</h4>
+        {favMovies.map((movie)=>( 
+          <Col xs={12} md={6} lg={4} key={movie.id} className="mb-4" >
+            <MovieCard 
+              movie = {movie}
             />
-          </Form.Group>
-          <Button variant="primary" type="submit" style={{ margin: '0.7rem'}}>
-            Save Changes
-          </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-      <Link to="/login">
-      <Button onClick={() => handleDeregister(user._id)} className="button-delete mt-3" type="submit" variant="danger" >Delete Account</Button>
-      </Link>
-    </Col>
-  </Row>
-  <FavoritesView favMovies={favMovies} removeFav={removeFav}/>
-</Container>
-);
+          </Col>
+        ))}              
+        </>
+      )}  
+      </Row>
+      </>
+  </Container>
+  );
 };

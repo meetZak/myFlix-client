@@ -1,20 +1,26 @@
-$color: steelblue;
+@import '~bootstrap/scss/bootstrap';
 
-.my-flix {
-  color: $color;
-}
-$body-bg: white;
+$primary-color: #efe6d5;
+$secondary-color: #9dbeb7;
+$accent-color: #e73213;
+$font-family: 'Lato', sans-serif;
 
-@import '~bootstrap/scss/bootstrap.scss';
-
-.form-body{
-    background-color: #75c8ae;
-}
-
-.navbar-custom {
-    background-color: teal;
+body {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: $primary-color;
+  font-family: $font-family;
+  padding: 30px;
 }
 
-.navbar-custom .navbar-brand {
-    color: white;
+.content-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

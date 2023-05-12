@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/abuyusr/myFlix-client.git/issues"
+    "url": "https://github.com/abuyusr/myFlix-client/issues"
   },
-  "homepage": "https://github.com/abuyusr/myFlix-client.git#readme",
+  "homepage": "https://github.com/abuyusr/myFlix-client#readme",
   "dependencies": {
     "bootstrap": "^5.2.3",
     "prop-types": "^15.8.1",

@@ -9,16 +9,40 @@ import { ProfileView } from "../profile-view/profile-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { title } from "process";
 
 // Creating state variable and Exposing the MainView components.
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
-  const [user, setUser] = useState(storedUser? storedUser : null);
-  const [token, setToken] = useState(storedToken? storedToken : null);
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const storedUser = localStorage.getItem("user");
+   //const storedToken = localStorage.getItem('token');
+ 
+   // code workaround as JSON was returning undefined
+   const storedUser = null;
+   const storedstoredUser = localStorage.getItem("user");
+   if (storedstoredUser) {
+     try {
+       storedUser = JSON.parse(storedstoredUser);
+   } catch (e) {}
+   }; 
+   //const storedUser = JSON.parse(localStorage.getItem("user")); // JSON is undefined now?
+   const storedToken = localStorage.getItem("token");
+   const [user, setUser] = useState(storedUser? storedUser : null);
+   const [token, setToken] = useState(storedToken? storedToken : null);
+   const [movies, setMovies] = useState([]); // existing state for all movie data
+   const [searchTerm, setSearchTerm] = useState('');
+   const [filteredMovies, setFilteredMovies] = useState(movies);
+   
+   // create search bar handle
+     const handleSearch = (event) => {
+       const searchQuery = event.target.value.toLowerCase();
+       setSearchTerm(searchQuery);
+   
+       const filtered = movies.filter((movie) =>
+         movie.title.toLowerCase().includes(searchQuery)
+       );
+   
+       setFilteredMovies(filtered);
+     };
 
 
 // Loading Data from an API
@@ -52,41 +76,30 @@ useEffect(() => {
     })
 }, [token])
 
-return (
-  <BrowserRouter>
-    <NavigationBar>
+console.log("test", user)
+  return (
+    <BrowserRouter>
+    <NavigationBar
         user={user}
         onLoggedOut={() => {
           setUser(null);
           setToken(null);
           localStorage.clear();
         }}
-      </NavigationBar>
+        
+      />
+      
       <Row className="justify-content-md-center">
         <Routes>
           <Route
-            path="/signup"
+           path="/signup"
             element={
               <>
-                {user ? (
-                  <Navigate to="/" /> // if no user 'Navigate' redirects to login page
+                { user ? (
+                  <Navigate to="/" /> // if user is validated redirects to homepage
                 ) : (
                   <Col md={5}>
                     <SignupView />
-                  </Col>
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <>
-                {user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col md={5}>
-                    <LoginView onLoggedIn={(user) => setUser(user)} /> 
                   </Col>
                 )}
               </>
@@ -94,53 +107,78 @@ return (
             }
           />
           <Route
-            path="/movies/:movieId" //check this endpoint matches yours
+            path="/login"
+            element={
+              <>
+                { user ? (
+                  <Navigate to="/" /> // if user is validated redirects to homepage
+                ) : (
+                  <Col md={5} >
+                    
+                    <LoginView onLoggedIn={(user, token) => {setUser(user); setToken(token);}} /> 
+                  </Col>
+                )}
+              </>
+
+            }
+          />
+          <Route
+            path="/movies/:movieId" 
             element={
               <>
                 {!user ? (
-                  <Navigate to="/login" replace />
+                  <Navigate to="/login" replace /> // if user is not validated redirects to login page
                 ) : movies.length === 0 ? (
                   <Col>The list is empty!</Col>
                 ) : (
                   <Col md={8}>
-                    <MovieView movies={movies} />
-                  </Col>
-                )}
-              </>
-            }
-          />
-         <Route
-            path="/users" 
-            element={
-              <>
-                {!user ? (
-                  <Navigate to="/login" replace />
-                ) : (
-                  <Col md={8}>
-                    <ProfileView user={user} movies={movies} />
+                    <MovieView movies={movies} user={user} username={user.Username} favoriteMovies={user.FavoriteMovies}/>
                   </Col>
                 )}
               </>
             }
           />
           <Route
-            path="/"
+            path="/users" //"/profile"
             element={
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty!</Col>
                 ) : (
-                  <>
-                    {movies.map((movie) => (
-                      <Col className="mb-4" key={movie.id} md={3}>
-                        <MovieCard movie={movie} />
-                      </Col>
-                    ))}
-                  </>
+                  <Col md={8}>
+                    <ProfileView 
+                      user={user} 
+                      movies={movies}  
+                    />
+                  </Col>
                 )}
               </>
+            }
+          />  
+        
+          <Route
+            path="/"
+            element={
+                <>
+                {!user ? (
+                    <Navigate to="/login" replace />
+                ) : filteredMovies.length === 0 ? (
+                    <Col>The list is empty!</Col>
+                ) : (
+                <>
+                <Row>
+                <Col className="d-flex justify-content-center" style={{marginTop: 90, marginBottom: 20}}>
+                  <input type="text" class="form-control form-control-lg" placeholder="search movies" value={searchTerm} onChange={handleSearch}></input>
+                </Col>
+                </Row>
+                  {filteredMovies.map((movie) => (
+                    <Col className="mb-4" key={movie._id} md={3}>
+                      <MovieCard movie={movie}  />
+                    </Col>
+                  ))}
+                </>
+                )}
+                </>  
             }
           />
         </Routes>
@@ -149,51 +187,4 @@ return (
   );
 };
 
-  {/* <Row className="justify-content-md-center">
-    {!user ? (
-      // user must first login or signup
-      <>
-        <Col md={5}>
-        <LoginView onLoggedIn={(user, token) => {setUser(user); setToken(token)}} /> 
-        or
-
-        <SignupView />
-        </Col>
-      </>
-      // displays movie-view when movie is clicked
-    ) : selectedMovie ? (
-      <Col md={8} style={{ border: "1px solid black" }}>
-      <MovieView 
-        movie={selectedMovie} 
-        onBackClick={() => setSelectedMovie(null)} 
-      />
-      <Button variant="secondary" size="sm" onClick={() => {setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
-      </Col>
-      // displays text message if list of movies is empty
-    ) : movies.length === 0 ? (
-      <p>The list is empty!</p>
-      
-    ) : loading ? (
-      // displays movie-card with logout button, if user does not select a movie
-          <p>Loading...</p>
-        ) : !movies || !movies.length ? (
-          <p>No movies found</p>
-        ) : (
-          <>
-        {movies.map((movie) => (
-          <Col key={movie._id} md={3}>
-          <MovieCard
-            movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-              setSelectedMovie(newSelectedMovie);
-            }}
-          />
-          </Col>
-        ))}
-        <Button md="1" variant="secondary" size="sm" onClick={() => {setUser(null);}}>Logout</Button>
-      </>
-    )}
-  </Row>
-  );
-};
- */}
+ 
