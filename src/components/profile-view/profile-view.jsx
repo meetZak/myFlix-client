@@ -4,7 +4,7 @@ import { UserInfo } from "./user-info";
 import { useParams } from "react-router";
 import { Card, Container, Col, Row, Button, Form } from "react-bootstrap";
 import './profile-view.scss';
-import moment from "moment";
+
 
 
 
