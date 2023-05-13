@@ -51,7 +51,7 @@ useEffect(() => {
     return;
   }
   // set loading before sending API request
-  setLoading(true);
+ /*  setLoading(true); */
   fetch("https://zaflix.herokuapp.com/movies", {
     headers: {Authorization: `Bearer ${token}`}
   })
