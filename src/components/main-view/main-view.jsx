@@ -58,7 +58,7 @@ useEffect(() => {
     .then((response) => response.json())
     .then((data) => {
       // stops loading after response received
-      setLoading(false);
+    /*   setLoading(false); */
       console.log('data', data);
       const moviesFromApi = data.map((movie) => {
         return {
