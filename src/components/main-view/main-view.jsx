@@ -222,7 +222,6 @@ export const MainView = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Row>
-      <Footer />
     </BrowserRouter>
   ); 
 }
