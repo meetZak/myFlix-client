@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Footer } from "../navigation-bar/footer";
+
 
 export const MainView = () => {
   // retrieve user and token from localStorage if they exist
