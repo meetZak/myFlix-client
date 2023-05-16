@@ -168,10 +168,10 @@ export const MainView = () => {
                       onChange={(e) => setFilter(e.target.value)}
                     >
                       <option value="">All genres</option>
-                      <option value="Family">Family</option>
-                      <option value="Comedy">Comedy</option>
+                      <option value="Crime Film">Crime Film</option>
+                      <option value="Comedi">Comedi</option>
                       <option value="Drama">Drama</option>
-                      <option value="Fantasy">Fantasy</option>
+                      <option value="Horror">Horror</option>
                       <option value="Romance">Romance</option>
                     </select>
                   </Col>
