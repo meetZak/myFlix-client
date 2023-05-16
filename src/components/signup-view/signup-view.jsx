@@ -108,9 +108,9 @@ export const SignupView = () => {
                 Submit
               </Button>
               </Form>
-              <Link to="/login" className=" d-flex justify-content-end">
+              {/* <Link to="/login" className=" d-flex justify-content-end">
               <Button variant="link" style={{color: "black"}}> Login </Button> 
-              </Link>
+              </Link> */}
             </Card.Body>
             </Card>
           </CardGroup>
