@@ -40,6 +40,8 @@ export const LoginView = ({ onLoggedIn }) => {
   });
   };
 
+  // login form with submit button
+
 return (
   <Container >
   <Row>
@@ -82,9 +84,9 @@ return (
     Submit
     </Button>
     </Form>
-    {/*  <Link to="/signup" className=" d-flex justify-content-end">
+      <Link to="/signup" className=" d-flex justify-content-end">
       <Button variant="link" style={{color: "black"}}> Create account </Button> 
-       </Link> */}
+       </Link> 
       </Card.Body>
     </Card>
     </CardGroup>
