@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Card , ButtonGroup} from "react-bootstrap";
+import { Button, Card, ButtonGroup} from "react-bootstrap";
 import { Link, Navigate} from "react-router-dom";
 import './movie-card.scss';
 

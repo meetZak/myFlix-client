@@ -1,9 +1,10 @@
-// Creating MovieView Component.
+//import { response } from 'express';
+//import { useState } from "react";
+
 import { Card, Container, Row, Col, Button} from 'react-bootstrap';
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import './movie-view.scss';
-
 
 export const MovieView = ({ user, movies}) => {
   const { movieId } = useParams();
@@ -28,7 +29,7 @@ return (
     <Row> 
       <Col md={12}> 
         <Card >
-          <Card.Img variant="top" src={movie.image} className="w-100" alt={movie.title} />
+          <Card.Img variant="top" src={movie.image} className="w-100" />
           <Card.Body >
             <Card.Title>{movie.title}</Card.Title>
             <Card.Text>
@@ -62,3 +63,4 @@ return (
   </Container> 
   );
 };
+ 

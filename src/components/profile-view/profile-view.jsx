@@ -8,7 +8,6 @@ import moment from "moment";
 
 
 
-
 export const ProfileView = ({ movies }) => {
 
     const storedUser = JSON.parse(localStorage.getItem("user"))
@@ -184,9 +183,7 @@ export const ProfileView = ({ movies }) => {
 
         </Col>
       </Row>
-
-
-        
+ 
       
       <>
       <Row style={{marginTop: 100}}>

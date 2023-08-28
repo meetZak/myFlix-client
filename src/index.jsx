@@ -1,22 +1,22 @@
-// Calling locally createRoot, MainView and container components.
 import { createRoot } from "react-dom/client";
 import { MainView } from "./components/main-view/main-view";
 import Container from "react-bootstrap/Container";
 
-// Importing scss into index.jsx
+// Import statement to indicate that you need to bundle `./index.scss`
 import "./index.scss";
 
-
-// Using container components.
-const MyFlixApp = () => {
-  return (
-    <Container>
-      <MainView />
+// Main component (will eventually use all the others)
+const MyFlixApplication = () => {
+  return (  
+    <Container >
+    <MainView />
     </Container>
-  );  
+  )
 };
 
-//Finding the root , importing creatRoot and Rendering the app.
+// Finds the root of your app
 const container = document.querySelector("#root");
 const root = createRoot(container);
-root.render(<MyFlixApp />);
+
+// Tells React to render your app in the root DOM element
+root.render(<MyFlixApplication />);
