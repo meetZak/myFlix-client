@@ -18,7 +18,7 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password
     };
 
-    fetch(`https://zaflix.herokuapp.com/login`, {
+    fetch(`https://zmaflix.netlify.app/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
