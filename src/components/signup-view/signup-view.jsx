@@ -22,7 +22,7 @@ export const SignupView = () => {
       Birthday: birthday
     }
 
-    fetch(`https://zaflix.herokuapp.com/users`, {
+    fetch(`https://zmovies.onrender.com/users`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
