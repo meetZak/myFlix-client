@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Card, ButtonGroup} from "react-bootstrap";
+import { Button, Card , ButtonGroup} from "react-bootstrap";
 import { Link, Navigate} from "react-router-dom";
 import './movie-card.scss';
 
@@ -25,7 +25,7 @@ export const MovieCard = ({ movie }) => {
     // if token is undefined/empty, the return statement stops the execution of the function
     if (!token) return;
 
-    const url = `https://zmovies.onrender.com/users/${user.Username}/movies/${movie.id}`;
+    const url = `https://zmovies.onrender.com/users${user.Username}/movies/${movie.id}`;
 
     let requestOptions = {
       method: '',

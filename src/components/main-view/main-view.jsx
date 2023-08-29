@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view"; 
+import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
@@ -12,7 +12,7 @@ import { title } from "process";
 
 
 export const MainView = () => {
- // const storedUser = localStorage.getItem("user");
+// const storedUser = localStorage.getItem("user");
   //const storedToken = localStorage.getItem('token');
 
   // code workaround as JSON was returning undefined
@@ -30,20 +30,22 @@ export const MainView = () => {
   const [movies, setMovies] = useState([]); // existing state for all movie data
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredMovies, setFilteredMovies] = useState(movies);
-  
-  // create search bar handle
-    const handleSearch = (event) => {
-      const searchQuery = event.target.value.toLowerCase();
-      setSearchTerm(searchQuery);
-  
-      const filtered = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery)
-      );
-  
-      setFilteredMovies(filtered);
-    };
-  
-  // useEffect hook allows React to perform side effects in component e.g fetching data
+
+// create search bar handle
+const handleSearch = (event) => {
+  const searchQuery = event.target.value.toLowerCase();
+  setSearchTerm(searchQuery);
+
+  const filtered = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery)
+  );
+
+  setFilteredMovies(filtered);
+};
+
+
+
+  // update the filtered movies list when the movies or filter change
   useEffect(() => {
     if (!token) {
       return;
@@ -77,8 +79,7 @@ export const MainView = () => {
       })
   }, [token]) 
 
-  
-   // 'if' statements are replaced by ternary operators '?:' - if true, if false, and combined into one peice of code wrapped in Row
+  // 'if' statements are replaced by ternary operators '?:' - if true, if false, and combined into one peice of code wrapped in Row
   console.log("test", user)
   return (
     <BrowserRouter>
