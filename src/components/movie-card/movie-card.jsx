@@ -25,7 +25,7 @@ export const MovieCard = ({ movie }) => {
     // if token is undefined/empty, the return statement stops the execution of the function
     if (!token) return;
 
-    const url = `https://zmovies.onrender.com/users${user.Username}/movies/${movie.id}`;
+    const url = `https://zaflix.herokuapp.com/users/${user.Username}/movies/${movie.id}`;
 
     let requestOptions = {
       method: '',
