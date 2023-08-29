@@ -2,14 +2,12 @@ import { useState } from "react";
 import { Card, CardGroup, Col, Container, Row, Button, Form} from "react-bootstrap";
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
-
 export const SignupView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
   
-
   // validation of user signup
   const handleSubmit = (event) => {
     
@@ -21,7 +19,6 @@ export const SignupView = () => {
       Email: email,
       Birthday: birthday
     }
-
     fetch(`https://zaflix.herokuapp.com/users`, {
       method: "POST",
       body: JSON.stringify(data),
@@ -32,7 +29,6 @@ export const SignupView = () => {
       if (response.ok) {
         alert("Signup successful");
         window.location.reload();
-
       } else {
         alert("Signup failed");
       }
@@ -40,7 +36,6 @@ export const SignupView = () => {
       .catch((e) => console.log(e));
       <Navigate to="/login" />
   }; 
-
   // signup form with submit button
   return (
     // new code: Bootstrap
@@ -51,7 +46,6 @@ export const SignupView = () => {
         <h1 style={{marginTop: 120}}>Welcome to MyFlix!</h1>
         </Col>
       </Row>
-
       <Row>
         <Col>
           <CardGroup>
@@ -68,10 +62,8 @@ export const SignupView = () => {
                   required
                   minLength="5" 
                   placeholder="username"
-
                 />
               </Form.Group>
-
               <Form.Group controlId="signUpFormPassword">
                 <Form.Label style={{ marginTop: 15 }}>Password:</Form.Label>
                 <Form.Control
@@ -82,7 +74,6 @@ export const SignupView = () => {
                   placeholder="password"
                 />
               </Form.Group>
-
               <Form.Group controlId="signUpFormEmail">
                 <Form.Label style={{ marginTop: 15 }}>Email:</Form.Label>
                 <Form.Control
@@ -93,7 +84,6 @@ export const SignupView = () => {
                   placeholder="email"
                 />
               </Form.Group>
-
               <Form.Group controlId="signUpFormBirthday">
                 <Form.Label style={{ marginTop: 15 }}>Birthday:</Form.Label>
                 <Form.Control
@@ -103,14 +93,13 @@ export const SignupView = () => {
                   required
                 />
               </Form.Group>
-
               <Button variant="primary" type="submit" style={{ margin: '0.7rem'}}>
                 Submit
               </Button>
               </Form>
-              <Link to="/login" className=" d-flex justify-content-end">
+               <Link to="/login" className=" d-flex justify-content-end">
               <Button variant="link" style={{color: "black"}}> Login </Button> 
-              </Link>
+              </Link> 
             </Card.Body>
             </Card>
           </CardGroup>
@@ -119,4 +108,3 @@ export const SignupView = () => {
     </Container>
 );
 };
-   
