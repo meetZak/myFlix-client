@@ -22,7 +22,7 @@ export const SignupView = () => {
       Birthday: birthday
     }
 
-    fetch(`https://movieapi-9rx2.onrender.com/users`, {
+    fetch(`https://zmovies.onrender.com/users`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

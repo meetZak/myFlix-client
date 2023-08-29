@@ -50,7 +50,7 @@ export const MainView = () => {
     }
     // set loading before sending API request
     //setLoading(true);
-    fetch(`https://movieapi-9rx2.onrender.com/movies`, {
+    fetch(`https://zmovies.onrender.com/movies`, {
       headers: {Authorization: `Bearer ${token}`}
     })
       .then((response) => response.json())
