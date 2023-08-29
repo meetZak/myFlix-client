@@ -16,7 +16,7 @@ export const LoginView = ({ onLoggedIn }) => {
     Username: username,
     Password: password
   };
-  fetch("https://zaflix.herokuapp.com/login", {
+  fetch("https://zmovies.onrender.com/login", {
     method: "POST",
     headers: {
     "Content-Type": "application/json"
