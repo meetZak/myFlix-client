@@ -17,3 +17,5 @@ React Bootstrap
 
 Link to hosted project
 https://zaflix.netlify.app/
+
+---
