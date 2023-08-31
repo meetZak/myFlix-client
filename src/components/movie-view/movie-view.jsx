@@ -28,7 +28,7 @@ return (
     <Row> 
       <Col md={12}> 
         <Card >
-          <Card.Img variant="top" src={movie.image} className="w-100" alt={movie.title} />
+          <Card.Img variant="top" src={movie.ImagePath} className="w-100" alt={movie.title} />
           <Card.Body >
             <Card.Title>{movie.title}</Card.Title>
             <Card.Text>
