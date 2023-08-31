@@ -43,7 +43,7 @@ export const ProfileView = ({ movies }) => {
       
       console.log(data);
 
-      fetch(`https://zmovies.onrender.com/users/${storedUser.Username}`, {
+      fetch(`https://zaflix.herokuapp.com/users/${storedUser.Username}`, {
           
           method: "PATCH",
           
@@ -74,7 +74,7 @@ export const ProfileView = ({ movies }) => {
     // handle for deleting user account
     const handleDeregister = () => { 
     
-        fetch(`https://zmovies.onrender.com/users/${storedUser.Username}`, {
+        fetch(`https://zaflix.herokuapp.com/users/${storedUser.Username}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
