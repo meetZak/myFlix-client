@@ -68,7 +68,7 @@ export const MovieCard = ({ movie }) => {
 
   return (
     <Card className="h-100" style={{marginTop: 20, backgroundColor: "whitesmoke"}}>
-      <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+      <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
       <Card.Img className="card-image" variant="top" src={movie.ImagePath} />
       </Link>
       
