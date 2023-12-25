@@ -52,7 +52,7 @@ const handleSearch = (event) => {
     }
     // set loading before sending API request
     //setLoading(true);
-    fetch(`https://zmovies.onrender.com/movies`, {
+    fetch(`http://3.83.145.210:8080/movies`, {
       headers: {Authorization: `Bearer ${token}`}
     })
       .then((response) => response.json())

@@ -17,7 +17,7 @@ export const LoginView = ({ onLoggedIn }) => {
     Username: username,
     Password: password
   };
-  fetch("https://zmovies.onrender.com/login", {
+  fetch("http://3.83.145.210:8080/login", {
     method: "POST",
     headers: {
     "Content-Type": "application/json"
