@@ -22,7 +22,7 @@ export const SignupView = () => {
       Birthday: birthday
     }
 
-    fetch(`http://3.83.145.210:8080/users`, {
+    fetch(`http://44.211.248.65:8080/users`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

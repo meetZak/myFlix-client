@@ -52,7 +52,7 @@ const handleSearch = (event) => {
     }
     // set loading before sending API request
     //setLoading(true);
-    fetch(`http://3.83.145.210:8080/movies`, {
+    fetch(`http://44.211.248.65:8080/movies`, {
       headers: {Authorization: `Bearer ${token}`}
     })
       .then((response) => response.json())

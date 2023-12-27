@@ -25,7 +25,7 @@ export const MovieCard = ({ movie }) => {
     // if token is undefined/empty, the return statement stops the execution of the function
     if (!token) return;
 
-    const url = `http://3.83.145.210:8080/users/${user.Username}/movies/${movie.id}`;
+    const url = `http://44.211.248.65:8080/users/${user.Username}/movies/${movie.id}`;
 
     let requestOptions = {
       method: '',
@@ -82,6 +82,7 @@ export const MovieCard = ({ movie }) => {
           
           <Button variant="danger" size="sm" className="fav-button" onClick={() => toggleFavorite()}> Remove favorite</Button>) : (
           <Button variant="success" size="sm" className="fav-button" onClick={() => toggleFavorite()}> Add favorite</Button>)
+          
           }
          
         </ButtonGroup>
