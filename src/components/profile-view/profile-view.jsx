@@ -43,7 +43,7 @@ export const ProfileView = ({ movies }) => {
       
       console.log(data);
 
-      fetch(`http://3.83.145.210:8080/users/${storedUser.Username}`, {
+      fetch(`https://zmovies.onrender.com/users/${storedUser.Username}`, {
           
           method: "PATCH",
           
@@ -74,7 +74,7 @@ export const ProfileView = ({ movies }) => {
     // handle for deleting user account
     const handleDeregister = () => { 
     
-        fetch(`http://3.83.145.210:8080/users/${storedUser.Username}`, {
+        fetch(`https://zmovies.onrender.com/users/${storedUser.Username}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
