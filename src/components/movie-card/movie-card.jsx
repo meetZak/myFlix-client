@@ -82,6 +82,7 @@ export const MovieCard = ({ movie }) => {
           
           <Button variant="danger" size="sm" className="fav-button" onClick={() => toggleFavorite()}> Remove favorite</Button>) : (
           <Button variant="success" size="sm" className="fav-button" onClick={() => toggleFavorite()}> Add favorite</Button>)
+          
           }
          
         </ButtonGroup>
